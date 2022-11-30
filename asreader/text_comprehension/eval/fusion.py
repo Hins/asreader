@@ -43,7 +43,7 @@ def accuracy_k_best(probas, mute=False, k_vals=[1,2,5]):
             recall_k[k] += (0 in indices)  # Uses the fact that correct answer is at index 0.
         recall_k[k] /= len(probas)
         if not mute:
-            print 'recall@%d' % k, recall_k[k]
+            print('recall %d %d' % (k, recall_k[k]))
     return recall_k
 
 
@@ -96,9 +96,9 @@ def adjust_length(pred_line, lineN, max_length):
         maxLen = numpy.append(max_length, len(pred_line))
     while len(pred_line) < maxLen[lineN - 1]:
         pred_line = numpy.append(pred_line, 0)
-    # print "Tail zero added to line "+str(lineN)+" of "+pred_file
+    # print("Tail zero added to line "+str(lineN)+" of "+pred_file)
     if len(pred_line) > maxLen[lineN - 1]:
-        print '!!! Warning: Line ' + str(lineN) + ' is  longer than the corresponding lines of previous files.'
+        print('!!! Warning: Line %s is  longer than the corresponding lines of previous files.' % str(lineN))
         maxLen[lineN - 1] = len(pred_line)
     return pred_line, max_length
 
@@ -136,10 +136,10 @@ def load_all_predictions(prediction_filenames):
         else:
             preds = pickle.load(pred_fh)
         pred_fh.close()
-        print "Results for " + pred_file
+        print("Results for %s" % pred_file)
         acc = accuracy(preds)
         model_accuracies.append(acc)
-        print 'Accuracy: ' + str(acc)
+        print('Accuracy: %s' % str(acc))
         all_preds.append(preds)
 
     return all_preds, model_accuracies
@@ -154,14 +154,14 @@ def fuse_predictions(prediction_filenames, weights=None):
     all_preds, model_accuracies = load_all_predictions(prediction_filenames)
 
     print
-    print "Ensemble (equal weights): "
+    print("Ensemble (equal weights): ")
     ensemble_accuracy = accuracy(numpy.mean(all_preds, 0))
-    print "Accuracy:\t"+str(ensemble_accuracy)
+    print("Accuracy:\t%s" % str(ensemble_accuracy))
     # If weights were provided, calculate the prediction of a weighted ensemble
     averaged = numpy.average(all_preds, axis=0, weights=weights)
     if weights is not None:
-        print "Weighted ensemble: "
-        print "Accuracy:\t"+accuracy(averaged)
+        print("Weighted ensemble: ")
+        print("Accuracy:\t %f" % accuracy(averaged))
     return {'averaged': averaged, 'model_preds': all_preds, 'ensemble_acc': ensemble_accuracy,
             'model_accuracies': model_accuracies}
 
@@ -200,13 +200,13 @@ def greedy_add(prediction_filenames, greedy_iterations=1):
                 member_predictions.append(all_preds[i])
 
     print
-    print 'Predictions included in the ensemble and their validation accuracies:'
+    print('Predictions included in the ensemble and their validation accuracies:')
     for i in ensemble:
-        print str(model_accuracies[i]) + "\t" + prediction_filenames[i]
+        print("%s \t %s" % (str(model_accuracies[i]), prediction_filenames[i]))
     best_single_valid_acc = model_accuracies[ensemble[0]]
 
     print
-    print 'Ensemble accuracy: ' + str(ensemble_accuracy)
+    print('Ensemble accuracy: %s' % str(ensemble_accuracy))
     ensemble_pred = numpy.mean(member_predictions, 0)
     return {'ensemble_prediction': ensemble_pred, 'ensemble_indices': ensemble,
             'ens_member_predictions': member_predictions, 'best_single_valid_acc': best_single_valid_acc,
@@ -235,15 +235,15 @@ def p_best_models(prediction_filenames, p=0.7):
     ensemble_pred = numpy.mean(member_predictions, 0)  # the ensemble prediction
 
     print
-    print 'Predictions included in the ensemble and their validation accuracies:'
+    print('Predictions included in the ensemble and their validation accuracies:')
     for i in ensemble:
-        print str(model_accuracies[i]) + "\t" + prediction_filenames[i]
+        print("%s \t %s" % (str(model_accuracies[i]), prediction_filenames[i]))
     best_single_valid_acc = model_accuracies[ensemble[0]]
     print
     ensemble_accuracy = accuracy(ensemble_pred)
-    print 'Ensemble accuracy: ' + str(ensemble_accuracy)
+    print('Ensemble accuracy: %s' % str(ensemble_accuracy))
     ensemble_pred = numpy.mean(member_predictions, 0)
-    # print 'Worse case: ' + str(accuracy_k_best(ensemble_pred)[1])
+    # print('Worse case: ' + str(accuracy_k_best(ensemble_pred)[1]))
     return {'ensemble_prediction': ensemble_pred, 'ensemble_indices': ensemble,
             'ens_member_predictions': member_predictions, 'best_single_valid_acc': best_single_valid_acc,
             'ensemble_acc': ensemble_accuracy}
@@ -268,9 +268,9 @@ def optimize_weights(ensemble_indices, ens_member_predictions):
                               constraints=({'type': 'ineq', 'fun': lambda x: 1 - sum(x)}))
 
     averaged_pred = numpy.average(ens_member_predictions, axis=0, weights=opt_result['x'])
-    print 'Optimized ensemble accuracy: '
-    print accuracy(averaged_pred)
-    print 'Optimal weights: ' + str(opt_result['x'])
+    print('Optimized ensemble accuracy: ')
+    print(accuracy(averaged_pred))
+    print('Optimal weights: %s' % str(opt_result['x']))
     return opt_result['x'], averaged_pred
 
 
@@ -350,9 +350,9 @@ if args.models_regexp:
 if args.models:
     to_fuse += args.models
 
-print "Models to be fused:"
+print("Models to be fused:")
 for model in enumerate(to_fuse):
-    print model
+    print(model)
 print
 
 # Save model predictions to disk and retain their paths
@@ -404,7 +404,7 @@ elif args.fusion_method == 'AverageAll':
         ens_weights = None
 
 ensemble_valid = result['ensemble_acc']
-print "Ensemble size: " + str(len(ensemble_indices))
+print("Ensemble size: %s" % str(len(ensemble_indices)))
 
 # Optionally, save the fusion predictions
 if args.output:
@@ -414,12 +414,12 @@ if args.output:
     else:
         pickle.dump(fused, output_fh)
     output_fh.close()
-    print "Fused validation predictions saved to " + args.output
+    print("Fused validation predictions saved to %s" % args.output)
 
 # Generate prediction files for ensemble models from test data
 if args.test_data:
     print
-    print '___________ Applying ensemble models to test data __________'
+    print('___________ Applying ensemble models to test data __________')
     # Create a list of filenames of dumped models included in the ensemble
     ensemble_models = []
     for i in ensemble_indices:
@@ -440,9 +440,9 @@ if args.test_data:
             pickle.dump(ensemble_test_prediction, output_fh)
         output_fh.close()
         print
-        print "Fused test predictions saved to " + args.output + '_test'
+        print("Fused test predictions saved to $s_test" % args.output)
 
 print
-print "Summary of results (model - valid. acc. - test acc.):"
-print "Best single model:\t" + str(best_single_valid) + "\t" + str(best_single_test)
-print args.fusion_method + " Ensemble:\t" + str(ensemble_valid) + "\t" + str(ensemble_test)
+print("Summary of results (model - valid. acc. - test acc.):")
+print("Best single model:\t%s\t%s" % (str(best_single_valid), str(best_single_test)))
+print("%s Ensemble:\t%s\t%s" % (args.fusion_method, str(ensemble_valid), str(ensemble_test)))

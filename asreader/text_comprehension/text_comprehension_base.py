@@ -203,7 +203,7 @@ class TextComprehensionBase(LearningExperimentBase):
     def execute(self):
 
         if self.args.output_dir:
-            print "Output will be stored in {}".format(self.args.output_dir)
+            print("Output will be stored in %s" % self.args.output_dir)
             if not os.path.exists(self.args.output_dir):
                 os.makedirs(self.args.output_dir)
 
@@ -246,10 +246,10 @@ class TextComprehensionBase(LearningExperimentBase):
                         dictionary[word] = len(dictionary)
                         new_word_count += 1
 
-                print "Added {} new words from file {} to previous vocabulary.".format(new_word_count, file)
+                print("Added %s new words from file %s to previous vocabulary." % (new_word_count, file))
 
             if not dictionary:
-                print "Computing new vocabulary for file {}.".format(file)
+                print("Computing new vocabulary for file %s." % file)
                 # compute vocabulary
                 f = codecs.open(file, 'r', encoding="utf8")
                 vocabulary = get_vocabulary(f, prepro)
@@ -312,7 +312,7 @@ class TextComprehensionBase(LearningExperimentBase):
             # this code is executed only when the user loads already trained model
 
             with open(self.args.load_model, "rb") as model_file:
-                print "Loading model {} ...".format(self.args.load_model)
+                print("Loading model %s ..." % self.args.load_model)
                 main_loop = load(model_file)  # load function from blocks.serialization
                 model = main_loop.model
 

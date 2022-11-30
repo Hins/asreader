@@ -153,7 +153,7 @@ class MemoryDataStreamMonitoring(SimpleExtension, MonitoringExtension):
 
 
         fraction_correct = correct_num / (1.0 * examples_num)
-        print "Accuracy {}".format(fraction_correct)
+        print("Accuracy %f" % format(fraction_correct))
 
         if self.output_results:
             with open(predictions_file_path, 'w') as out_file:

@@ -41,7 +41,7 @@ def get_vocabulary(input_stream, sentence_to_tokens_fn=None, progress_indication
 
         line_counter += 1
         if line_counter % progress_indication_lines == 0:
-            print "Processed line " + str(line_counter)
+            print("Processed line %s" % str(line_counter))
 
 
     # summary statistics
@@ -49,9 +49,9 @@ def get_vocabulary(input_stream, sentence_to_tokens_fn=None, progress_indication
     distinct_words = len(list(word_counts))
 
 
-    print "STATISTICS"
-    print "Total words: " + str(total_words)
-    print "Total distinct words: " + str(distinct_words)
+    print("STATISTICS")
+    print("Total words: %s" % str(total_words))
+    print("Total distinct words: %s" % str(distinct_words))
 
     return word_counts
 
@@ -72,7 +72,8 @@ def get_most_frequent_words(text_file, number_of_words, sentence_to_tokens_fn=No
     total_words = sum(word_counts.values())
     words_covered_by_top_n = sum(top_n.values())
 
-    print "Percentage of words covered by top " + str(number_of_words) + " words: " + str(words_covered_by_top_n/total_words)
+    print("Percentage of words covered by top %s words %" % (str(number_of_words),
+                                                             str(words_covered_by_top_n/total_words))
 
     return dict(top_n).keys()
 

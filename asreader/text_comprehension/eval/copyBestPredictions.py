@@ -65,16 +65,16 @@ validation_files = glob.glob(args.input_dir + args.validation_prefix + '*' + arg
 
 # Create a dict of best validation predictions for each model and their accuracies:
 bestPredictions=dict()
-print "Validation files:"
+print("Validation files:")
 for valFile in validation_files:
-	print valFile
+	print(valFile)
     # Prediction filename stemming to get a root which is common to all prediction files from the given model
 	params_match=re.search(args.validation_prefix+'(.*)\.e\d+i\d+'+args.suffix,valFile)
 	if params_match:
 		param_string = params_match.group(1)
-		print 'Parameter key: '+ param_string
+		print("Parameter key: %s" % param_string)
 		valAccuracy = predictionAccuracy(valFile)
-		print 'Validation accuracy: '+str(valAccuracy)
+		print("Validation accuracy: %s" % str(valAccuracy))
         # If this is the best prediction so far, update the value in the bestPredictions dict
 		if param_string in bestPredictions:
 			if bestPredictions[param_string]['accuracy']< valAccuracy:
@@ -85,10 +85,10 @@ for valFile in validation_files:
 			bestPredictions[param_string]['accuracy'] = valAccuracy
 			bestPredictions[param_string]['file'] = valFile
 	else:
-		print '!!! Failed to parse filename as a prediction !!!'
+		print('!!! Failed to parse filename as a prediction !!!')
 	
 print
-print "Best predictions to be copied:"
+print("Best predictions to be copied:")
 
 # Model with the best validation accuracy and its stats
 bestValModel={'validation':0}
@@ -98,19 +98,19 @@ if not os.path.exists(args.output_dir):
 
 # Now we copy each best validation prediction together with the corresponding test prediction to an output dir. 
 for params in bestPredictions:
-	print params
-	print 'Validation accuracy: '+str(bestPredictions[params]['accuracy'])
+	print(params)
+	print('Validation accuracy: %s' % str(bestPredictions[params]['accuracy']))
 	shutil.copyfile(bestPredictions[params]['file'],args.output_dir+'/'+args.output_prefix+params+'.y_hat_valid')
 	try:
 		src_test_file=re.sub(args.validation_prefix,args.test_prefix,bestPredictions[params]['file'])
-		print 'Source test prediction: '+src_test_file
+		print('Source test prediction: %s' % src_test_file)
 		test_accuracy=predictionAccuracy(src_test_file)
 	except IOError:
         # If there are two filename formats for the predictions, we can use an alternative prefix if the primary one fails
 		src_test_file=re.sub(args.validation_prefix,args.alt_test_prefix,bestPredictions[params]['file'])
-		print 'Source test prediction: '+src_test_file
+		print('Source test prediction: %s' % src_test_file)
 		test_accuracy=predictionAccuracy(src_test_file)
-	print 'Test accuracy: '+str(test_accuracy)
+	print('Test accuracy: %s' % str(test_accuracy))
 	shutil.copyfile(src_test_file,args.output_dir+'/'+args.output_prefix+params+'.y_hat_test')
 	# Keep track of the best-accuracy single model
 	if bestPredictions[params]['accuracy']>bestValModel['validation']:
@@ -120,7 +120,7 @@ for params in bestPredictions:
 	print
 		
 print		
-print 'Best validation model:'
-print bestValModel['params']
-print 'Validation: '+str(bestValModel['validation'])
-print 'Test: '+str(bestValModel['test'])
+print('Best validation model:')
+print(bestValModel['params'])
+print('Validation: %s' % str(bestValModel['validation']))
+print('Test: %s' % str(bestValModel['test']))

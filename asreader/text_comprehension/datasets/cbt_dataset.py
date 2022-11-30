@@ -144,8 +144,8 @@ class CBDataset(Dataset):
         """
         tmp = self.translate_one_line(candidates_strs)
         if len(tmp) <> 10:
-            print "ERR"
-            print candidates_tmp
+            print("ERR")
+            print(candidates_tmp)
         """
 
         return (self.translate_one_line(context_str), self.translate_one_line(question_str),

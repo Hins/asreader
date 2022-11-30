@@ -41,7 +41,7 @@ def load_text_file(filename, logged_value):
             if m:
                 # pick the value from regexp
                 values.append(float(m.group(1)))
-    #print (values)
+    #print(values)
     return values
 
 
@@ -68,9 +68,9 @@ def load_values_from_multiple_files(files_list, logged_value):
     name_and_max = sorted(name_and_max, key=lambda x: x[1])
 
     print
-    print "{} best results".format(logged_value)
+    print("%s best results" % logged_value)
     for pair in name_and_max:
-        print pair
+        print(pair)
 
     return lines_dict
 
@@ -99,8 +99,8 @@ def onpick(event):
     xdata = thisline.get_xdata()
     ydata = thisline.get_ydata()
     ind = event.ind
-    print "Label: " + thisline._label
-    print 'onpick points:', zip(xdata[ind], ydata[ind])
+    print("Label: %s" % thisline._label)
+    print('onpick points: %s' % zip(xdata[ind], ydata[ind]))
 
 fig.canvas.mpl_connect('pick_event', onpick)
 

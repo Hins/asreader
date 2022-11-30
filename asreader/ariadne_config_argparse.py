@@ -148,4 +148,4 @@ def create_ariadne_config_skeleton(parser, version="1.0", root_folder="config"):
         info_file.write('  "givesLabels": false\n')
         info_file.write('}\n')
 
-    print "Config created in " + root_folder + " directory"
+    print("Config created in %s directory" % root_folder)

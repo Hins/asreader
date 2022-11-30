@@ -50,8 +50,8 @@ def shuffle_ne(data):
     for codes, mask in zip(candidates.tolist(),candidates_mask.tolist()):
         codes_trim = codes[0:int(sum(mask))]
         if len(codes_trim)!=len(set(codes_trim)):
-                print "DUPLICATE token present!"
-                print str(codes)
+                print("DUPLICATE token present!")
+                print(str(codes))
     """
 
     return context, context_mask, question, question_mask, answer, candidates, candidates_mask

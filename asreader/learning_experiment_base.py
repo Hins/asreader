@@ -329,7 +329,7 @@ class LearningExperimentBase(object):
             elif self.args.patience_metric == 'accuracy':
                 patience_metric_name = accuracy.name
             else:
-                print "WARNING: Falling back to COST function for patience."
+                print("WARNING: Falling back to COST function for patience.")
                 patience_metric_name = cost.name
 
             extensions.append(
@@ -372,9 +372,10 @@ class LearningExperimentBase(object):
 
     @staticmethod
     def print_parameters_info(params_list):
-        print "Parameters: "
+        print("Parameters: ")
         for parameter in params_list:
-            print "\t" + str(parameter.tag.annotations[0].name) + "." + str(parameter) + " " + str(parameter.container.data.shape) + ".size=" + str(
-                parameter.container.data.size)
-        print "Trained parameters count: " + str(sum([parameter.container.data.size for parameter in params_list]))
+            print("\t %s.%s .size=%s" % (str(parameter.tag.annotations[0].name), str(parameter), str(
+                parameter.container.data.shape),str(
+                parameter.container.data.size)))
+        print("Trained parameters count: %s" % str(sum([parameter.container.data.size for parameter in params_list])))
 

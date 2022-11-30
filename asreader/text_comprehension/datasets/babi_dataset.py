@@ -150,15 +150,15 @@ class bAbIDataset(Dataset):
                 candidates_list = list(set(state.context_tokens))
 
                 if answer_str not in candidates_list:
-                    print "Answer not found in context document: "+answer_str
-                    print context_str
+                    print("Answer not found in context document: %s" % answer_str)
+                    print(context_str)
 
                 candidates_list.remove(answer_str)
                 # correct answer is always the first
                 candidates_list.insert(0,answer_str)
                 candidates_strs = " ".join(candidates_list)
 
-                #print "Example {}".format(self.num)
+                #print("Example {}".format(self.num))
                 self.num += 1
 
                 return (self.translate_one_line(context_str), self.translate_one_line(question_str),
@@ -173,8 +173,8 @@ class bAbIDataset(Dataset):
         """
         tmp = self.translate_one_line(candidates_strs)
         if len(tmp) <> 10:
-            print "ERR"
-            print candidates_tmp
+            print("ERR")
+            print(candidates_tmp)
         """
 
         return None
