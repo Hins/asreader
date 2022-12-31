@@ -53,6 +53,8 @@ def accuracy(probas):
     :param probas: a list of numpy arrays, each containing a distribution of probabilities over candidates answers for one example
     :return: accuracy
     """
+    if numpy.isnan(probas):
+        return 0.0
     ncorrect = 0
     for row in probas:
         # We use the convention of having the ground truth answer at index 0
